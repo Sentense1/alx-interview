@@ -1,19 +1,20 @@
 #!/usr/bin/python3
-# Returns a list of lists of integers representing the Pascal’s triangle of n
+# Returns a list of lists of integers representing Pascal's triangle of n
 
 def pascal_triangle(n):
-    """ Representing the Pascal’s triangle,
+    """Representing Pascal's triangle.
 
-        Args:
-            n - Size of triangle,
+    Args:
+        n - Size of the triangle.
 
-        Returns: List of lists of integers.
+    Returns:
+        List of lists of integers.
     """
     # Check if n is less than or equal to 0, return an empty list in such cases
     if n <= 0:
         return []
 
-    # Initialize the Pascal's triangle with the first row
+    # Initialize Pascal's triangle with the first row
     pas_triangle = [[1]]
 
     for i in range(1, n):
