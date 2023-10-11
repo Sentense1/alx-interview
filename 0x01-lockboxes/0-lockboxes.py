@@ -1,18 +1,14 @@
 #!/usr/bin/python3
-"""Method that determines if all the boxes can be opened."""
+'''A module for working with lockboxes.
+'''
 
 
 def canUnlockAll(boxes):
-    """
-    Unlock boxes that can be opened.
-
-    Args:
-        boxes - boxes to unlock
-
-    Returns:
-        True if all boxes can be opened, else return False
-    """
-        n = len(boxes)
+    '''Checks if all the boxes in a list of boxes containing the keys
+    (indices) to other boxes can be unlocked given that the first
+    box is unlocked.
+    '''
+    n = len(boxes)
     seen_boxes = set([0])
     unseen_boxes = set(boxes[0]).difference(set([0]))
     while len(unseen_boxes) > 0:
