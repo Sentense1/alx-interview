@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-# Determines if all the boxes can be opened.
-#    Each box may contain keys to the other boxes.
-
-""" Method that determines if all the boxes can be opened. """
+"""
+Method that determines if all the boxes can be opened.
+"""
 
 
 def canUnlockAll(boxes):
