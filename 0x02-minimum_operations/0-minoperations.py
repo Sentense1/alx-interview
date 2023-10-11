@@ -1,36 +1,25 @@
 #!/usr/bin/python3
 """
-Finds the minimum number of operations needed to obtain 'n' 'H' characters.
+Minimum Operations's Modules
 """
 
 
 def minOperations(n):
     """
-    Finds the minimum number of operations needed to obtain 'n' 'H' characters.
-
-    Args:
-        n (int): The desired number of 'H' characters in the file.
-
-    Returns:
-        int: The minimum number of operations required.
+    Finding minimum operation of n of H characater.
     """
+
     if n <= 1:
         return 0
+    num, div, numOfOperations = n, 2, 0
 
-    # Initialize a list to store the minimum operations for each i (0 to n).
-    min_list = [0] * (n + 1)
-
-    for i in range(2, n + 1):
-        # Initialize to the worst case: copy all H and then paste.
-        min_list[i] = i
-
-        # Try all possible factors to see if we can optimize the process.
-        for j in range(2, i):
-            if i % j == 0:
-                min_list[i] = min(min_list[i], min_list[j] + i // j)
-
-    return min_list[n]
-
+    while num > 1:
+        if num % div == 0:
+            num = num / div
+            numOfOperations = numOfOperations + div
+        else:
+            div += 1
+    return numOfOperations
 
 
 if __name__ == '__main__':
