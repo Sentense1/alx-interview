@@ -15,31 +15,14 @@ def canUnlockAll(boxes):
     Returns:
         True if all boxes can be opened, else return False
     """
-    # Total number of boxes in the input.
-    n = len(boxes)
-
-    # Use set to keep track of seen boxes during transversal.
-    seen_boxes = set()
-
-    # List to store the box numbers with keys.
-    # We start with the first box (box 0) which is unlocked
-    box_with_keys = [0]
-
-    # Loop through boxes with keys
-    while box_with_keys:
-        # Get the latest box with keys to explore
-        current_box = box_with_keys.pop()
-
-        # Mark the current box as seen by adding to seen_boxes
-        seen_boxes.add(current_box)
-
-        # Check the keys in the current box and
-        #   add unvisited box numbers to the list of keys.
-        for key in boxes[current_box]:
-            if key not in seen_boxes:
-                # Add unvisited box numbers to the list of keys to explore.
-                box_with_keys.append(key)
-
-    # If all boxes have been seen, return True; otherwise, return False
-    return len(seen_boxes) == n
-
+        n = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
