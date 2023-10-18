@@ -23,7 +23,8 @@ def parse_line(line, regex, log):
     if match:
         stat_code, file_size = match.group(1, 2)
         log["file_size"] += int(file_size)
-        if stat_code.isdecimal(): log["code_list"][stat_code] += 1
+        if stat_code.isdecimal():
+            log["code_list"][stat_code] += 1
     return log
 
 
@@ -35,8 +36,7 @@ def print_codes(log):
     sorted_code_list = sorted(log["code_list"])
     for code in sorted_code_list:
         if log["code_list"][code]:
-          print(f"{code}: {log['code_list'][code]}")
-
+            print(f"{code}: {log['code_list'][code]}")
 
 
 def main():
