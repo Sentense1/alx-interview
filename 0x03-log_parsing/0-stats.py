@@ -1,45 +1,63 @@
 #!/usr/bin/python3
-""" script that reads stdin line by line and computes metrics """
+"""
+Module that reads stdin line by line and computes metrics
+"""
 import sys
+import re
 
-def print_results(statusCodes, fileSize):
-    """ Print statistics """
-    print("File size: {:d}".format(fileSize))
-    for statusCode, times in sorted(statusCodes.items()):
-        if times:
-            print("{:s}: {:d}".format(statusCode, times))
 
-statusCodes = {
-    "200": 0,
-    "301": 0,
-    "400": 0,
-    "401": 0,
-    "403": 0,
-    "404": 0,
-    "405": 0,
-    "500": 0
-}
-fileSize = 0
-n_lines = 0
+def initialize_log():
+    """
+    Creates a dictionary for the log
+    """
+    status_code = [200, 301, 400, 401, 403, 404, 405, 500]
+    log = {"file_size": 0, "code_list": {str(code): 0 for code in status_code}}
+    return log
 
-try:
-    """ Read stdin line by line """
+
+def parse_line(line, regex, log):
+    """
+    Matches the regex and populate the values of the dictionaries.
+    """
+    match = regex.fullmatch(line)
+    if match:
+        stat_code, file_size = match.group(1, 2)
+        log["file_size"] += int(file_size)
+        if stat_code.isdecimal():
+            log["code_list"][stat_code] += 1
+    return log
+
+
+def print_codes(log):
+    """
+    Prints the logs in the necessary format
+    """
+    print("File size: {}".format(log['file_size']))
+    sorted_code_list = sorted(log["code_list"])
+    for code in sorted_code_list:
+        if log["code_list"][code]:
+            print(f"{code}: {log['code_list'][code]}")
+
+
+def main():
+    """
+    The entry point to the program
+    """
+    regex = re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)')  # noqa
+
+    log = initialize_log()
+
+    line_count = 0
+
     for line in sys.stdin:
-        if n_lines != 0 and n_lines % 10 == 0:
-            """ After every 10 lines, print from the beginning """
-            print_results(statusCodes, fileSize)
-        n_lines += 1
-        data = line.split()
-        try:
-            """ Compute metrics """
-            statusCode = data[-2]
-            if statusCode in statusCodes:
-                statusCodes[statusCode] += 1
-            fileSize += int(data[-1])
-        except ValueError:
-            print("Value error caught", ValueError)
-    print_results(statusCodes, fileSize)
-except KeyboardInterrupt:
-    """ Keyboard interruption, print from the beginning """
-    print_results(statusCodes, fileSize)
-    raise
+        line = line.strip()
+
+        line_count = line_count + 1
+
+        parsed_log = parse_line(line, regex, log)
+        if line_count % 10 == 0:
+            print_codes(parsed_log)
+
+
+if __name__ == "__main__":
+    main()
