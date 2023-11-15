@@ -5,6 +5,9 @@ Module to Rotate 2D Matrix
 
 
 def rotate_2d_matrix(matrix):
+    """
+    Returns the matrix in rotated 2d form
+    """
     n = len(matrix)
 
     # Transpose the matrix
