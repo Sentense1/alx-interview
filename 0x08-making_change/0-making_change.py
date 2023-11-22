@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Minimum/fewer operation to meet a given total
+Module for male Change.
 """
 
 
@@ -9,26 +9,38 @@ def makeChange(coins, total):
     Determines the fewest number of coins needed to meet a given
     amount total when given a pile of coins of different values.
     """
-    # Initialize a list to store the minimum number
-    #   of coins needed for each amount
-    min_list = [float('inf')] * (total + 1)
+    # If the total is 0 or less, no coins are needed
+    if total <= 0:
+        return 0
 
-    # Base case: To make a total of 0, no coins are needed
-    min_list[0] = 0
+    remainder = total
 
-    for coin in coins:
-        for i in range(coin, total + 1):
-            # Update the minimum number of coins needed for the current amount
-            min_list[i] = min(min_list[i], min_list[i - coin] + 1)
+    coins_count = 0
 
-    # If it's not possible to make the total
-    #   amount with the given coins, return -1
-    if min_list[total] == float('inf'):
-        return -1
-    else:
-        # Otherwise, return the minimum number of coins needed
-        #   for the total amount
-        return min_list[total]
+    coin_index = 0
+
+    # Sort the list of coins in descending order
+    sorted_coins_list = sorted(coins, reverse=True)
+
+    # Get the length of the list of coins
+    list_len = len(coins)
+
+    # Iterate until the remainder is reduced to 0
+    while remainder > 0:
+        # If we have considered all coin denominations
+        #   and still have a non-zero remainder, it's not possible
+        if coin_index >= list_len:
+            return -1
+        # If the current coin can be subtracted from the remainder,
+        # update the counts
+        if remainder - sorted_coins_list[coin_index] >= 0:
+            remainder -= sorted_coins_list[coin_index]
+            coins_count += 1
+        else:
+            # Move to the next coin denomination
+            coin_index += 1
+    # Return the total number of coins needed
+    return coins_count
 
 
 if __name__ == "__main__":
